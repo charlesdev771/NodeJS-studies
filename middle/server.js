@@ -15,6 +15,10 @@ mongoose.connect(process.env.CONNECTIONSTRING, {useNewUrlParser: true, useUnifie
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
+const helmet = require('helmet');
+const csrf = require('csrf');
+
+app.use(helmet());
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -36,8 +40,9 @@ const sessionOptions = session({
 });
 
 // Nossos próprios middlewares
-app.use(middlewareGlobal);
+app.use(middlewareGlobal());
 app.use(routes);
+app.use(csrf());
 
 app.use(sessionOptions);
 app.use(flash());
